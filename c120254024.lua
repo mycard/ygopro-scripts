@@ -1,7 +1,7 @@
 local m=120254024
 local list={120120000,120252003,120252027}
 local cm=_G["c"..m]
-cm.name="Engine of Destruction"
+cm.name="エンジン・オブ・デストラクション"
 function cm.initial_effect(c)
     RD.AddCodeList(c,list)
     --Activate
