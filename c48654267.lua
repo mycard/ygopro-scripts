@@ -87,7 +87,7 @@ function c48654267.filter(c)
 end
 function c48654267.gcheck(g,eft,ft1)
 	return g:FilterCount(c48654267.filter,nil)<=eft
-	and g:FilterCount(Card.IsLocation,nil,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE)<=ft1
+	and g:FilterCount(Card.IsLocation,nil,LOCATION_DECK+LOCATION_GRAVE)<=ft1
 end
 function c48654267.spop(e,tp,eg,ep,ev,re,r,rp)
 	local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
@@ -99,7 +99,7 @@ function c48654267.spop(e,tp,eg,ep,ev,re,r,rp)
 		if eft>0 then eft=1 end
 	end
 	local loc=0
-	if ft1>0 then loc=loc+LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE end
+	if ft1>0 then loc=loc+LOCATION_DECK+LOCATION_GRAVE end
 	if eft>0 then loc=loc+LOCATION_EXTRA end
 	if loc==0 then return end
 	local sg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c48654267.spfilter),tp,loc,0,nil,e,tp)
