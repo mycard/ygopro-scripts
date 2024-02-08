@@ -1,5 +1,4 @@
---マグマッチョ・ドラゴン
---Scripted by kiritsoft
+--メメント・ウラモン
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--search
@@ -11,7 +10,7 @@ function s.initial_effect(c)
 	e3:SetCountLimit(1,id)
 	e3:SetTarget(s.thtg)
 	e3:SetOperation(s.thop)
-	c:RegisterEffect(e3)	
+	c:RegisterEffect(e3)
 	local e2=e3:Clone()
 	e2:SetCode(EVENT_SUMMON_SUCCESS)
 	c:RegisterEffect(e2)
@@ -28,7 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function s.thfilter(c,tp)
-	return c:IsSetCard(0x1a1)  and c:IsAbleToHand() and not c:IsCode(id)
+	return c:IsSetCard(0x1a1) and c:IsAbleToHand() and not c:IsCode(id)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.thfilter(chkc) end

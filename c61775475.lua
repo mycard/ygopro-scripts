@@ -1,4 +1,4 @@
---A·O·G リターンゼロ
+--A・O・G リターンゼロ
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--synchro summon
@@ -21,6 +21,7 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1)
 	e2:SetTarget(s.tdtg)
@@ -65,8 +66,8 @@ end
 function s.rmlimit(e,c,tp,r,re)
 	return c:IsAttribute(e:GetLabel()) and re and re:IsActiveType(TYPE_MONSTER) and re:GetHandler():IsCode(id) and r==REASON_COST
 end
-function s.tdfilter(c,tp)
-	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0x2) and c:IsAbleToDeck()
+function s.tdfilter(c)
+	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0x2) and c:IsAbleToDeck() and c:IsFaceup()
 end
 function s.desfilter(c)
 	return c:GetSequence()<5
@@ -81,12 +82,12 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,sg,sg:GetCount(),0,0)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	if not tg then return end
+	local tg=Duel.GetTargetsRelateToChain()
+	if #tg==0 then return end
 	Duel.SendtoDeck(tg,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)
 	local g=Duel.GetOperatedGroup()
 	if g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end
-	local ct=tg:GetCount()
+	local ct=g:GetCount()
 	local dg=Duel.GetMatchingGroup(s.desfilter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
 	if ct>0 and dg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()

@@ -1,4 +1,4 @@
---暗之守护神
+--闇の守護神－ダーク・ガーディアン
 local s,id,o=GetID()
 function s.initial_effect(c)
 	aux.AddCodeList(c,25955164,62340868,98434877,53194323)
@@ -9,7 +9,7 @@ function s.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
 	e1:SetValue(aux.FALSE)
-	c:RegisterEffect(e1)	
+	c:RegisterEffect(e1)
 	--special summon rule
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)

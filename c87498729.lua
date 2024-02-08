@@ -1,8 +1,7 @@
 --Fallen of the Tistina
---Coded by Lee
 local s,id,o=GetID()
 function s.initial_effect(c)
-	--place 
+	--place
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_IGNITION)

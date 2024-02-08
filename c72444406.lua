@@ -1,4 +1,4 @@
---エ二グマスター·バックビット
+--エニグマスター・パックビット
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--synchro summon
@@ -32,7 +32,6 @@ function s.initial_effect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCode(EVENT_FREE_CHAIN)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_END_PHASE)
@@ -42,7 +41,6 @@ function s.initial_effect(c)
 	e3:SetOperation(s.spsop)
 	c:RegisterEffect(e3)
 end
---move
 function s.sumcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
@@ -65,7 +63,7 @@ function s.mvtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.mvop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if  Duel.DiscardHand(tp,aux.TRUE,1,1,REASON_EFFECT+REASON_DISCARD)~=1 then return false end
+	if Duel.DiscardHand(tp,aux.TRUE,1,1,REASON_EFFECT+REASON_DISCARD)~=1 then return false end
 	if tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e)
 		and Duel.MoveToField(tc,tp,tc:GetOwner(),LOCATION_SZONE,POS_FACEUP,true) then
 		local e1=Effect.CreateEffect(e:GetHandler())
@@ -77,18 +75,17 @@ function s.mvop(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e1)
 	end
 end
---special
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetType()==TYPE_TRAP+TYPE_CONTINUOUS
 end
 function s.sfilter(c,e,tp)
-	return c:IsLocation(LOCATION_SZONE) and c:GetOriginalType()&TYPE_MONSTER>0 
+	return c:IsLocation(LOCATION_SZONE) and c:GetOriginalType()&TYPE_MONSTER>0
 		and c:IsFaceup() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function s.spstg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnField() and s.sfilter(chkc,e,tp) end
+function s.spstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingTarget(s.sfilter,tp,LOCATION_SZONE,0,1,nil,e,tp) end
+		and Duel.IsExistingMatchingCard(s.sfilter,tp,LOCATION_SZONE,0,1,nil,e,tp) end
+	local g=Duel.GetMatchingGroup(s.sfilter,tp,LOCATION_SZONE,0,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,1,0,0)
 end
 function s.spsop(e,tp,eg,ep,ev,re,r,rp)

@@ -1,6 +1,4 @@
---绣眼满当当
 --目白圧し
---script by REIKAI
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--Activate
@@ -12,7 +10,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
-	--set 
+	--set
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)

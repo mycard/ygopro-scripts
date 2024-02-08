@@ -1,5 +1,4 @@
 --粛声なる祈り
---Script by kiritosoft
 local s,id,o=GetID()
 function s.initial_effect(c)
 	aux.AddCodeList(c,4810828,56350972,10774240)
@@ -9,7 +8,7 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_LEAVE_FIELD)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id)

@@ -1,5 +1,4 @@
 --幻蝋館の使者
---Coded by Lee
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--Special Summon (from hand : itself)
@@ -45,8 +44,8 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then 
-	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) 
+	if c:IsRelateToEffect(e) then
+	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
 function s.indtg(e,c)
@@ -65,7 +64,7 @@ end
 function s.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(s.filter,tp,0,LOCATION_MZONE,nil)
-	if #g>0 then 
+	if #g>0 then
 		local tc=g:GetFirst()
 		while tc do
 			local e1=Effect.CreateEffect(c)

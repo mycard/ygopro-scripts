@@ -1,4 +1,4 @@
---閃刀姫ーアザレア・テンペランス
+--閃刀姫－アザレア・テンペランス
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--link summon
@@ -18,7 +18,7 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_EQUIP)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)   
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
 	e2:SetCountLimit(1,id+o)
 	e2:SetCost(s.eqcost)
 	e2:SetTarget(s.eqtg)

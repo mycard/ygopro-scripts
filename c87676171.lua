@@ -1,11 +1,10 @@
 --Tistina, the Divinity that Defies Darkness
---Coded by Lee
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,10,2)
 	c:EnableReviveLimit()
-	--to grave 
+	--to grave
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOGRAVE)

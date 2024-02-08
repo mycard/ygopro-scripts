@@ -1,5 +1,4 @@
---犀子国王
---Lua by Gim J.Blocks
+--犀子の王様
 function c74289646.initial_effect(c)
 	--dice
 	local e1=Effect.CreateEffect(c)
@@ -20,7 +19,7 @@ function c74289646.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	if cl==3 then
 		e:SetCategory(CATEGORY_DICE+CATEGORY_DAMAGE)
-		e:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_PLAYER_TARGET)	
+		e:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_PLAYER_TARGET)
 		Duel.SetTargetPlayer(1-tp)
 		Duel.SetOperationInfo(0,CATEGORY_DICE,nil,0,tp,1)
 		Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,0)

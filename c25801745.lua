@@ -1,5 +1,4 @@
 --粛声の祈り手ロー
---Script by 卡手
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--set
@@ -57,7 +56,7 @@ function s.rlevel(e,c)
 	else return lv end
 end
 function s.cfilter(c,tp,se)
-	return c:IsRace(RACE_WARRIOR+RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsType(TYPE_RITUAL)
+	return c:IsFaceup() and c:IsRace(RACE_WARRIOR+RACE_DRAGON) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsType(TYPE_RITUAL)
 		and (se==nil or c:GetReasonEffect()~=se) and c:IsControler(tp)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)

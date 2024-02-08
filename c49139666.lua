@@ -1,6 +1,4 @@
---异星战队 大爆炸
---ミストレンジャー ビッグ・バン
---script by REIKAI
+--異星戦隊 ビッグ・バン
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--spsummon
@@ -18,7 +16,7 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_MZONE) 
+	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,id+o)
 	e2:SetTarget(s.lvtg)
 	e2:SetOperation(s.lvop)
