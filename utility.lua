@@ -1688,6 +1688,60 @@ function Auxiliary.GiveUpNormalDraw(e,tp,property)
 	Duel.RegisterEffect(e1,tp)
 	Duel.RegisterFlagEffect(tp,FLAG_ID_NO_NORMAL_DRAW,RESET_PHASE+PHASE_DRAW,property,1)
 end
+---Add EFFECT_TYPE_ACTIVATE effect to Equip Spell Cards
+---@param c Card
+---@param is_self boolean
+---@param is_opponent boolean
+---@param filter function
+---@param eqlimit function|nil
+---@param pause? boolean
+---@param skip_target? boolean
+function Auxiliary.AddEquipSpellEffect(c,is_self,is_opponent,filter,eqlimit,pause,skip_target)
+	local value=(type(eqlimit)=="function") and eqlimit or 1
+	if pause==nil then pause=false end
+	if skip_target==nil then skip_target=false end
+	--Activate
+	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_EQUIP)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
+	if not skip_target then
+		e1:SetTarget(Auxiliary.EquipSpellTarget(is_self,is_opponent,filter,eqlimit))
+	end
+	e1:SetOperation(Auxiliary.EquipSpellOperation(eqlimit))
+	if not pause then
+		c:RegisterEffect(e1)
+	end
+	--Equip limit
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetCode(EFFECT_EQUIP_LIMIT)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetValue(value)
+	c:RegisterEffect(e2)
+	return e1
+end
+function Auxiliary.EquipSpellTarget(is_self,is_opponent,filter,eqlimit)
+	local loc1=is_self and LOCATION_MZONE or 0
+	local loc2=is_opponent and LOCATION_MZONE or 0
+	return function(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+		if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsFaceup() and (not eqlimit or eqlimit(e,chkc)) end
+		if chk==0 then return Duel.IsExistingTarget(filter,tp,loc1,loc2,1,nil) end
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EQUIP)
+		Duel.SelectTarget(tp,filter,tp,loc1,loc2,1,1,nil)
+		Duel.SetOperationInfo(0,CATEGORY_EQUIP,e:GetHandler(),1,0,0)
+	end
+end
+function Auxiliary.EquipSpellOperation(eqlimit)
+	return function (e,tp,eg,ep,ev,re,r,rp)
+		local c=e:GetHandler()
+		local tc=Duel.GetFirstTarget()
+		if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsFaceup() and (not eqlimit or eqlimit(e,tc)) then
+			Duel.Equip(tp,c,tc)
+		end
+	end
+end
 ---If this face-up card would leave the field, banish it instead.
 ---@param c Card
 ---@param condition? function
@@ -1707,105 +1761,4 @@ end
 ---@param e Effect
 function Auxiliary.BanishRedirectCondition(e)
 	return e:GetHandler():IsFaceup()
-end
----
----@param c Card
----@param event integer
----@param func function
----@param groups? Group|nil
----@param location? integer|nil
----@param code? integer
----@param reset_flag? integer
-function Auxiliary.RegisterEachTimeEvent(c,event,func,groups,location,code,reset_flag)
-	if reset_flag==nil and not location then
-		if c:GetOriginalType()&TYPE_MONSTER>0 then location=LOCATION_MZONE
-		elseif c:GetOriginalType()&TYPE_FIELD>0 then location=LOCATION_FZONE
-		elseif c:GetOriginalType()&(TYPE_SPELL+TYPE_TRAP)>0 then location=LOCATION_SZONE end
-	end
-	code=code or c:GetOriginalCode()
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e1:SetCode(event)
-	e1:SetCondition(Auxiliary.EachTimeEventCondition(func))
-	e1:SetOperation(Auxiliary.EachTimeEventOperation(func,code,reset_flag))
-	e1:SetLabelObject(groups)
-	if reset_flag==nil then
-		e1:SetRange(location)
-		c:RegisterEffect(e1)
-	else
-		e1:SetReset(reset_flag)
-		Duel.RegisterEffect(e1,c:GetControler())
-	end
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e2:SetCode(EVENT_BREAK_EFFECT)
-	e2:SetOperation(Auxiliary.EachTimeEventBreak)
-	e2:SetLabelObject(e1)
-	if reset_flag==nil then
-		e2:SetRange(location)
-		c:RegisterEffect(e2)
-	else
-		e2:SetReset(reset_flag)
-		Duel.RegisterEffect(e2,c:GetControler())
-	end
-	return e1
-end
-function Auxiliary.EachTimeEventCondition(func)
-	return	function(e,tp,eg,ep,ev,re,r,rp)
-				return eg:IsExists(func,1,nil,e,tp,eg,ep,ev,re,r,rp) and Duel.IsChainSolving()
-			end
-end
-function Auxiliary.EachTimeEventOperation(func,code,reset_flag)
-	return	function(e,tp,eg,ep,ev,re,r,rp)
-				local g=eg:Filter(func,nil,e,tp,eg,ep,ev,re,r,rp)
-				local groups=e:GetLabelObject()
-				if reset_flag==nil then
-					local c=e:GetHandler()
-					if c:GetFlagEffect(code)==0 then
-						e:SetLabel(0)
-						if groups~=nil then groups:Clear() end
-					end
-					if e:GetLabel()==0 then
-						e:SetLabel(1)
-						local flag=c:GetFlagEffectLabel(code)
-						if not flag then
-							c:RegisterFlagEffect(code,RESET_EVENT+RESETS_STANDARD+RESET_CHAIN,0,1,#g)
-						else
-							c:SetFlagEffectLabel(code,flag+#g)
-							c:RegisterFlagEffect(code,RESET_EVENT+RESETS_STANDARD+RESET_CHAIN,0,1)
-						end
-					else
-						local flag=c:GetFlagEffectLabel(code)
-						if flag then
-							c:SetFlagEffectLabel(code,flag+#g)
-						end
-					end
-				else
-					if Duel.GetFlagEffect(tp,code)==0 then
-						e:SetLabel(0)
-						if groups~=nil then groups:Clear() end
-					end
-					if e:GetLabel()==0 then
-						e:SetLabel(1)
-						local flag=Duel.GetFlagEffectLabel(tp,code)
-						if not flag then
-							Duel.RegisterFlagEffect(tp,code,RESET_CHAIN,0,1,#g)
-						else
-							Duel.SetFlagEffectLabel(tp,code,flag+#g)
-							Duel.RegisterFlagEffect(tp,code,RESET_CHAIN,0,1)
-						end
-					else
-						local flag=Duel.GetFlagEffectLabel(tp,code)
-						if flag then
-							Duel.SetFlagEffectLabel(tp,code,flag+#g)
-						end
-					end
-				end
-				if groups~=nil then groups:Merge(g) end
-			end
-end
-function Auxiliary.EachTimeEventBreak(e,tp,eg,ep,ev,re,r,rp)
-	e:GetLabelObject():SetLabel(0)
 end

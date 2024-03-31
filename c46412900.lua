@@ -39,14 +39,6 @@ function c46412900.initial_effect(c)
 	e3:SetCondition(c46412900.damcon2)
 	e3:SetOperation(c46412900.damop2)
 	c:RegisterEffect(e3)
-	aux.RegisterEachTimeEvent(c,EVENT_SPSUMMON_SUCCESS,c46412900.cfilter)
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e4:SetCode(EVENT_CHAIN_SOLVED)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetCondition(c46412900.damcon3)
-	e4:SetOperation(c46412900.damop3)
-	c:RegisterEffect(e4)
 end
 function c46412900.sprfilter(c)
 	return c:IsFaceupEx() and c:IsAbleToRemoveAsCost()
@@ -66,7 +58,7 @@ end
 function c46412900.sprtg(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	local g=Duel.GetMatchingGroup(c46412900.sprfilter,tp,LOCATION_GRAVE+LOCATION_ONFIELD,0,e:GetHandler())
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local sg=g:SelectSubGroup(tp,c46412900.gcheck,false,1,3,tp)
+	local sg=g:SelectSubGroup(tp,c46412900.gcheck,true,1,3,tp)
 	if sg then
 		sg:KeepAlive()
 		e:SetLabelObject(sg)
@@ -75,7 +67,7 @@ function c46412900.sprtg(e,tp,eg,ep,ev,re,r,rp,chk,c)
 end
 function c46412900.sprop(e,tp,eg,ep,ev,re,r,rp,c)
 	local g=e:GetLabelObject()
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
+	Duel.Remove(g,POS_FACEUP,REASON_SPSUMMON)
 	g:DeleteGroup()
 end
 function c46412900.damcon(e,tp,eg,ep,ev,re,r,rp)
@@ -103,23 +95,14 @@ function c46412900.damop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.SSet(tp,g:GetFirst())
 	end
 end
-function c46412900.cfilter(c,e,tp)
-	return c:IsSummonPlayer(1-tp)
+function c46412900.cfilter(c,tp)
+	return c:IsSummonPlayer(tp)
 end
 function c46412900.damcon2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return eg:IsExists(c46412900.cfilter,1,nil,e,tp) and not Duel.IsChainSolving()
+	return eg:IsExists(c46412900.cfilter,1,nil,1-tp)
 end
 function c46412900.damop2(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,46412900)
 	Duel.Damage(1-tp,500,REASON_EFFECT)
-end
-function c46412900.damcon3(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetFlagEffect(46412900)>0
-end
-function c46412900.damop3(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_CARD,0,46412900)
-	local ct=e:GetHandler():GetFlagEffect(46412900)
-	e:GetHandler():ResetFlagEffect(46412900)
-	Duel.Damage(1-tp,ct*500,REASON_EFFECT)
 end
