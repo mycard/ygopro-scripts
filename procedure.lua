@@ -180,7 +180,7 @@ function Auxiliary.SynMixCondition(f1,f2,f3,f4,minct,maxct,gc)
 				local mg
 				local mgchk=false
 				if mg1 then
-					mg=mg1
+					mg=mg1:Filter(Card.IsCanBeSynchroMaterial,nil,c)
 					mgchk=true
 				else
 					mg=Auxiliary.GetSynMaterials(tp,c)
@@ -206,7 +206,7 @@ function Auxiliary.SynMixTarget(f1,f2,f3,f4,minct,maxct,gc)
 				local mg
 				local mgchk=false
 				if mg1 then
-					mg=mg1
+					mg=mg1:Filter(Card.IsCanBeSynchroMaterial,nil,c)
 					mgchk=true
 				else
 					mg=Auxiliary.GetSynMaterials(tp,c)
@@ -1231,7 +1231,7 @@ function Auxiliary.AddFusionProcCodeRep(c,code1,cc,sub,insf)
 end
 ---Fusion monster, name * minc to maxc
 ---@param c Card
----@param code1 integer
+---@param code1 integer|table
 ---@param minc integer
 ---@param maxc integer
 ---@param sub boolean
@@ -1241,7 +1241,7 @@ function Auxiliary.AddFusionProcCodeRep2(c,code1,minc,maxc,sub,insf)
 end
 ---Fusion monster, name + condition * n
 ---@param c Card
----@param code1 integer
+---@param code1 integer|table
 ---@param f function|table
 ---@param cc integer
 ---@param sub boolean
@@ -1301,7 +1301,7 @@ function Auxiliary.AddFusionProcFunFunRep(c,f1,f2,minc,maxc,insf)
 end
 ---Fusion monster, name + condition * minc to maxc
 ---@param c Card
----@param code1 integer
+---@param code1 integer|table
 ---@param f function|table
 ---@param minc integer
 ---@param maxc integer
@@ -1312,8 +1312,8 @@ function Auxiliary.AddFusionProcCodeFunRep(c,code1,f,minc,maxc,sub,insf)
 end
 ---Fusion monster, name + name + condition * minc to maxc
 ---@param c Card
----@param code1 integer
----@param code2 integer
+---@param code1 integer|table
+---@param code2 integer|table
 ---@param f function|table
 ---@param minc integer
 ---@param maxc integer
