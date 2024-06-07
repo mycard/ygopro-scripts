@@ -70,7 +70,7 @@ function s.drop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(p,d,REASON_EFFECT)
 end
 function s.spfilter2(c,tp)
-	return Duel.GetMZoneCount(tp,c)>0 and c:IsFaceup() and c:IsType(TYPE_SYNCHRO) 
+	return Duel.GetMZoneCount(tp,c)>0 and c:IsFaceup() and c:IsType(TYPE_SYNCHRO)
 		and c:IsAbleToExtra() and c:IsSetCard(0x1b1)
 end
 function s.sptg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

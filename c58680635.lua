@@ -36,7 +36,7 @@ function c58680635.lvop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_CHANGE_LEVEL)
 		e1:SetValue(4)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 		c:RegisterEffect(e1)
 		if c:IsLevel(4) and Duel.IsExistingMatchingCard(aux.NecroValleyFilter(c58680635.thfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil)
 			and Duel.SelectYesNo(tp,aux.Stringid(58680635,2)) then
@@ -65,7 +65,7 @@ function c58680635.drop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) then
 		local g=Group.FromCards(c,tc)
-		if Duel.SendtoGrave(g,REASON_EFFECT)~=0 then
+		if Duel.SendtoGrave(g,REASON_EFFECT)>0 and g:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)>0 then
 			Duel.Draw(tp,1,REASON_EFFECT)
 		end
 	end

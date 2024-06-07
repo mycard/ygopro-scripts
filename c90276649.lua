@@ -44,7 +44,7 @@ function c90276649.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c90276649.splimit(e,c,tp,sumtp,sumpos)
-	return not c:IsAttribute(ATTRIBUTE_LIGHT) and bit.band(sumtp,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM 
+	return not c:IsAttribute(ATTRIBUTE_LIGHT) and bit.band(sumtp,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end
 function c90276649.thcfilter(c)
 	return c:IsFaceup() and not c:IsSetCard(0x9b)

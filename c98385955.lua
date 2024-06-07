@@ -42,7 +42,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.spfilter(c,tp)
-	return Duel.GetMZoneCount(tp,c)>0 and c:IsFaceup() and c:IsType(TYPE_SYNCHRO) 
+	return Duel.GetMZoneCount(tp,c)>0 and c:IsFaceup() and c:IsType(TYPE_SYNCHRO)
 		and c:IsAbleToExtra() and c:IsSetCard(0x1b1)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

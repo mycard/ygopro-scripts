@@ -24,17 +24,19 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.filter(c,e,tp,check)
-	local id=c:GetCode()
-	return c:IsRace(RACE_FISH) and c:IsFaceup() and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,check,id)
+	local code=c:GetCode()
+	local check2=check and Duel.GetMZoneCount(tp,c)>0
+	return c:IsRace(RACE_FISH) and c:IsFaceup()
+		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp,check2,code)
 end
-function s.thfilter(c,e,tp,check,id)
-	return c:IsCode(id) and (c:IsAbleToHand() or check and c:IsCanBeSpecialSummoned(e,0,tp,false,false))
+function s.thfilter(c,e,tp,check,code)
+	return c:IsCode(code) and (c:IsAbleToHand() or check and c:IsCanBeSpecialSummoned(e,0,tp,false,false))
 end
 function s.spfilter(c)
 	return c:IsRace(RACE_FISH) and c:IsType(TYPE_SYNCHRO) and c:IsFaceup()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local check=Duel.GetLocationCount(tp,LOCATION_MZONE)>=0 and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_MZONE,0,1,nil)
+	local check=Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_MZONE,0,1,nil)
 	if check then e:SetLabel(1) else e:SetLabel(0) end
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and s.filter(chkc,e,tp,check) end
 	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,LOCATION_MZONE,0,1,nil,e,tp,check) end
@@ -43,11 +45,11 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	local id=tc:GetCode()
+	local code=tc:GetCode()
 	if tc:IsRelateToEffect(e) and tc:IsRace(RACE_FISH) then
 		if Duel.Destroy(tc,REASON_EFFECT)>0 then
-			local check=Duel.GetLocationCount(tp,LOCATION_MZONE)>=0 and e:GetLabel()==1
-			local sc=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp,check,id):GetFirst()
+			local check=Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and e:GetLabel()==1
+			local sc=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp,check,code):GetFirst()
 			if check and sc:IsCanBeSpecialSummoned(e,0,tp,false,false) and (not sc:IsAbleToHand() or Duel.SelectOption(tp,1190,1152)==1) then
 				Duel.SpecialSummon(sc,0,tp,tp,false,false,POS_FACEUP)
 			else
@@ -91,8 +93,6 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 	if not g or g:FilterCount(Card.IsRelateToEffect,nil,e)~=2 then return end
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
-		local sc=nil
-		local dc=nil
 		if g and g:GetCount()==2 then
 			if g:FilterCount(s.cfilter,nil,e,tp)==2 then
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)

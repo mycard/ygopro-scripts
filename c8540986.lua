@@ -41,7 +41,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function s.ffilter(c)
-	 return c:IsLevelBelow(9) and c:IsRace(RACE_PYRO)
+	return c:IsLevelBelow(9) and c:IsRace(RACE_PYRO)
 end
 function s.efilter(e,re,rp)
 	return re:IsActiveType(TYPE_MONSTER) and e:GetHandlerPlayer()~=re:GetHandlerPlayer()

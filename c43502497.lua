@@ -96,6 +96,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if #g<2 or Duel.Destroy(g,REASON_EFFECT)<2 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local sg=Duel.SelectMatchingCard(tp,s.sfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #sg==0 then return end
 	Duel.SendtoHand(sg,nil,REASON_EFFECT)
 	Duel.ConfirmCards(1-tp,sg)
 end

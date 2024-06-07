@@ -54,13 +54,15 @@ end
 function c95207988.damop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		Duel.Damage(tp,tc:GetAttack()/2,REASON_EFFECT)
-		Duel.Damage(1-tp,tc:GetAttack()/2,REASON_EFFECT)
+		Duel.Damage(tp,tc:GetAttack()/2,REASON_EFFECT,true)
+		Duel.Damage(1-tp,tc:GetAttack()/2,REASON_EFFECT,true)
+		Duel.RDComplete()
 	end
 end
 function c95207988.descon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=eg:GetFirst()
-	return tc:IsControler(tp) and tc:IsFaceup() and tc:IsAttribute(ATTRIBUTE_DARK) and tc:IsType(TYPE_SYNCHRO) and tc:IsSummonLocation(LOCATION_EXTRA)
+	return tc:IsControler(tp) and tc:IsFaceup() and tc:IsAttribute(ATTRIBUTE_DARK)
+		and tc:IsType(TYPE_SYNCHRO) and tc:IsSummonLocation(LOCATION_EXTRA)
 end
 function c95207988.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() end

@@ -10,6 +10,7 @@ function c83962752.initial_effect(c)
 	e1:SetTarget(c83962752.target)
 	e1:SetOperation(c83962752.activate)
 	c:RegisterEffect(e1)
+	--summon limit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetRange(LOCATION_SZONE)

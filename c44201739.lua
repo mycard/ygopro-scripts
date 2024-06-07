@@ -38,10 +38,11 @@ function c44201739.spop(e,tp,eg,ep,ev,re,r,rp)
 	if g:CheckSubGroup(aux.dncheck,3,3) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 		local sg=g:SelectSubGroup(tp,aux.dncheck,false,3,3,nil)
+		Duel.ShuffleHand(tp)
+		Duel.ShuffleDeck(tp)
 		Duel.ConfirmCards(1-tp,sg)
 		if not c:IsRelateToEffect(e) then return end
 		Duel.SpecialSummon(c,SUMMON_VALUE_SELF,tp,tp,false,false,POS_FACEUP)
-		Duel.ShuffleDeck(tp)
 	end
 end
 function c44201739.negcon(e,tp,eg,ep,ev,re,r,rp)
@@ -62,7 +63,7 @@ end
 function c44201739.negop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,c44201739.filter,tp,LOCATION_DECK+LOCATION_EXTRA,0,1,1,nil,re)
-	if g:GetCount()>0 and Duel.SendtoGrave(g,REASON_EFFECT)~=0 then
+	if g:GetCount()>0 and Duel.SendtoGrave(g,REASON_EFFECT)~=0 and g:GetFirst():IsLocation(LOCATION_GRAVE) then
 		Duel.NegateActivation(ev)
 	end
 end
