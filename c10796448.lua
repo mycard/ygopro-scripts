@@ -60,7 +60,7 @@ function c10796448.costfilter(c)
 	return c:IsReleasable() and ((c:IsFacedown() and c:IsDefensePos()) or (c:IsFaceup() and c:IsAttackPos()))
 end
 function c10796448.spcheck(g,tp)
-	return Duel.GetMZoneCount(tp,sg)>0 and aux.gfcheck(g,Card.IsPosition,POS_FACEUP_ATTACK,POS_FACEDOWN_DEFENSE)
+	return Duel.GetMZoneCount(tp,g)>0 and aux.gfcheck(g,Card.IsPosition,POS_FACEUP_ATTACK,POS_FACEDOWN_DEFENSE)
 end
 function c10796448.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.GetMatchingGroup(c10796448.costfilter,tp,LOCATION_MZONE,0,nil)
