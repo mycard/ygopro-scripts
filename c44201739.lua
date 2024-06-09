@@ -38,9 +38,9 @@ function c44201739.spop(e,tp,eg,ep,ev,re,r,rp)
 	if g:CheckSubGroup(aux.dncheck,3,3) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 		local sg=g:SelectSubGroup(tp,aux.dncheck,false,3,3,nil)
+		Duel.ConfirmCards(1-tp,sg)
 		Duel.ShuffleHand(tp)
 		Duel.ShuffleDeck(tp)
-		Duel.ConfirmCards(1-tp,sg)
 		if not c:IsRelateToEffect(e) then return end
 		Duel.SpecialSummon(c,SUMMON_VALUE_SELF,tp,tp,false,false,POS_FACEUP)
 	end
