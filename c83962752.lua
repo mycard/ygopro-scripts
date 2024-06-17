@@ -1,5 +1,6 @@
 --シンクロ・パニック
 function c83962752.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(83962752,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)

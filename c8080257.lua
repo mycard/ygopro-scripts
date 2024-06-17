@@ -44,9 +44,9 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-		local g=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
-		Duel.HintSelection(g)
-		local tc=g:GetFirst()
+		local sg=Duel.SelectMatchingCard(tp,s.posfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+		Duel.HintSelection(sg)
+		local tc=sg:GetFirst()
 		Duel.ChangePosition(tc,POS_FACEDOWN_DEFENSE)
 	end
 end

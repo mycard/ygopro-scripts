@@ -1,9 +1,11 @@
 --地縛共振
 function c95207988.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e1)
+	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(95207988,0))
 	e2:SetCategory(CATEGORY_DAMAGE)
@@ -16,6 +18,7 @@ function c95207988.initial_effect(c)
 	e2:SetTarget(c95207988.damtg)
 	e2:SetOperation(c95207988.damop)
 	c:RegisterEffect(e2)
+	--
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(95207988,1))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)

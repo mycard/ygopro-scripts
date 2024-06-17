@@ -1,5 +1,6 @@
 --電極獣アニオン
 function c58680635.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(58680635,0))
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
@@ -10,6 +11,7 @@ function c58680635.initial_effect(c)
 	e1:SetTarget(c58680635.lvtg)
 	e1:SetOperation(c58680635.lvop)
 	c:RegisterEffect(e1)
+	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(58680635,1))
 	e2:SetCategory(CATEGORY_DRAW+CATEGORY_TOGRAVE)

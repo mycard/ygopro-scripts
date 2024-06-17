@@ -33,12 +33,12 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function s.descon1(e,tp,eg,ep,ev,re,r,rp)
-	local eg=e:GetHandler():GetEquipGroup()
-	return eg:GetCount()==0
+	local g=e:GetHandler():GetEquipGroup()
+	return g:GetCount()==0
 end
 function s.descon2(e,tp,eg,ep,ev,re,r,rp)
-	local eg=e:GetHandler():GetEquipGroup()
-	return eg:GetCount()>0
+	local g=e:GetHandler():GetEquipGroup()
+	return g:GetCount()>0
 end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) end

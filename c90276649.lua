@@ -1,6 +1,7 @@
 --幻奏の歌姫クープレ
 function c90276649.initial_effect(c)
 	aux.EnablePendulumAttribute(c)
+	--
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_FIELD)
 	e0:SetRange(LOCATION_PZONE)
@@ -9,6 +10,7 @@ function c90276649.initial_effect(c)
 	e0:SetTargetRange(1,0)
 	e0:SetTarget(c90276649.splimit)
 	c:RegisterEffect(e0)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(90276649,0))
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
@@ -19,6 +21,7 @@ function c90276649.initial_effect(c)
 	e1:SetTarget(c90276649.thtg)
 	e1:SetOperation(c90276649.thop)
 	c:RegisterEffect(e1)
+	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(90276649,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -31,6 +34,7 @@ function c90276649.initial_effect(c)
 	e2:SetTarget(c90276649.sptg)
 	e2:SetOperation(c90276649.spop)
 	c:RegisterEffect(e2)
+	--
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(90276649,2))
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)

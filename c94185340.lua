@@ -1,5 +1,6 @@
 --サクリファイス・ランクアップ
 function c94185340.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(94185340,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -35,8 +36,8 @@ function c94185340.activate(e,tp,eg,ep,ev,re,r,rp)
 	local rg=g:FilterSelect(tp,Card.IsAbleToRemove,2,2,nil,POS_FACEUP)
 	if #rg>0 and Duel.Remove(rg,POS_FACEUP,REASON_EFFECT)==2 and tc:IsFaceup() then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCard(tp,c94185340.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc:GetRank()+1)
-		local sc=g:GetFirst()
+		local sg=Duel.SelectMatchingCard(tp,c94185340.filter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc:GetRank()+1)
+		local sc=sg:GetFirst()
 		if sc and Duel.SpecialSummonStep(sc,0,tp,tp,false,false,POS_FACEUP)~=0 then
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetDescription(aux.Stringid(94185340,1))

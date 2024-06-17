@@ -1,5 +1,6 @@
 --電極獣カチオン
 function c21291696.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(21291696,0))
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND+CATEGORY_SUMMON)
@@ -10,6 +11,7 @@ function c21291696.initial_effect(c)
 	e1:SetTarget(c21291696.thtg)
 	e1:SetOperation(c21291696.thop)
 	c:RegisterEffect(e1)
+	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(21291696,1))
 	e2:SetType(EFFECT_TYPE_IGNITION)

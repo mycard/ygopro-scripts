@@ -22,6 +22,7 @@ function s.initial_effect(c)
 	e2:SetValue(1)
 	e2:SetOperation(s.synop)
 	c:RegisterEffect(e2)
+	--
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)

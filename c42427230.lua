@@ -73,9 +73,9 @@ function c42427230.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c42427230.damop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tp=e:GetLabel()
+	local p=e:GetLabel()
 	if c:IsReason(REASON_DESTROY) then
-		Duel.Damage(1-tp,500,REASON_EFFECT)
+		Duel.Damage(1-p,500,REASON_EFFECT)
 	end
 	e:Reset()
 end

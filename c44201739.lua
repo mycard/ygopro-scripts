@@ -1,5 +1,6 @@
 --ミラァと燐寸之仔
 function c44201739.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(44201739,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -9,6 +10,7 @@ function c44201739.initial_effect(c)
 	e1:SetTarget(c44201739.sptg)
 	e1:SetOperation(c44201739.spop)
 	c:RegisterEffect(e1)
+	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(44201739,1))
 	e2:SetCategory(CATEGORY_NEGATE)

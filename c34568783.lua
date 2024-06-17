@@ -45,7 +45,7 @@ function s.cgop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetValue(att)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 	c:RegisterEffect(e1)
-	if tuner and not c:IsType(TYPE_TUNER)
+	if tuner==1 and not c:IsType(TYPE_TUNER)
 		and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
 		Duel.BreakEffect()
 		local e2=Effect.CreateEffect(c)
