@@ -67,7 +67,7 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local res=false
 	Duel.HintSelection(tg)
 	if tc:IsType(TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_LINK) then
-		if Duel.SendtoDeck(tc,nil,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_EXTRA) then
+		if Duel.SendtoDeck(tc,nil,SEQ_DECKTOP,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_EXTRA) then
 			res=true
 		end
 	elseif tc:IsType(TYPE_TOKEN) then
@@ -90,22 +90,23 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoDeck(g2,nil,SEQ_DECKBOTTOM,REASON_EFFECT)
 	end
 end
-function s.sfilter(c)
-	return c:IsSetCard(0x2f) and c:IsFacedown()
-end
 function s.descon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end
+function s.sfilter(c)
+	return c:IsSetCard(0x2f) and c:IsFaceup()
+end
 function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	local g=Duel.GetMatchingGroup(s.sfilter,tp,LOCATION_EXTRA,0,nil)
-	if g:GetClassCount(Card.GetCode)<3 then
+	local g1=Duel.GetMatchingGroup(s.sfilter,tp,LOCATION_EXTRA,0,nil)
+	local g2=Duel.GetMatchingGroup(Card.IsFacedown,tp,LOCATION_EXTRA,0,nil)
+	if (g1:GetClassCount(Card.GetCode)+#g2)<3 then
 		Duel.SetOperationInfo(0,CATEGORY_DESTROY,e:GetHandler(),1,0,0)
 	end
 end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local g=Duel.GetMatchingGroup(s.sfilter,tp,LOCATION_EXTRA,0,nil)
+	local g=Duel.GetMatchingGroup(Card.IsSetCard,tp,LOCATION_EXTRA,0,nil,0x2f)
 	if g:GetClassCount(Card.GetCode)>=3 and Duel.SelectYesNo(tp,aux.Stringid(id,5)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
 		local sg=g:SelectSubGroup(tp,aux.dncheck,false,3,3)

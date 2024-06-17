@@ -64,7 +64,7 @@ function s.destg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return tc:IsDestructable() end
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,tc,1,0,0)
 	if tc:GetTextAttack()>0 then
-		Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,nil,1-tp,tc:GetTextAttack())
+		Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,tc:GetTextAttack())
 	end
 end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)

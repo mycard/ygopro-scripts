@@ -140,9 +140,8 @@ function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 		and c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousControler(tp) and c:GetReasonPlayer()==1-tp
 end
 function s.spfilter(c,e,tp)
-	return (c:IsFusionSetCard(0xdd) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-		or c:IsFusionSetCard(0xcf) and c:IsFusionType(TYPE_RITUAL) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
-		and not (c:IsCode(70551291) or c:IsCode(55410871) or c:IsCode(20654247)))
+	return (c:IsSetCard(0xdd) or c:IsSetCard(0xcf) and c:IsAllTypes(TYPE_MONSTER+TYPE_RITUAL))
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and (c:IsLocation(LOCATION_GRAVE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 			or c:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0)
 end
