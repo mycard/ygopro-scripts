@@ -15,28 +15,28 @@ function s.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function s.filter(c,lg)
-	return c:IsFaceup() and lg:IsContains(c) and c:IsCanBeEffectTarget()
+	return c:IsFaceup() and lg:IsContains(c)
 end
 function s.lmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local lg=e:GetHandler():GetLinkedGroup()
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc,lg) end
 	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_MZONE,1,nil,lg) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPERATECARD)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	local g=Duel.SelectTarget(tp,s.filter,tp,0,LOCATION_MZONE,1,1,nil,lg)
 end
 function s.lmop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	local c=e:GetHandler()
 	if tc and tc:IsRelateToEffect(e) then
-		if not tc:IsImmuneToEffect(e) then
-			tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
-		end
+		local fid=c:GetFieldID()
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1,fid)
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 		e1:SetCode(EFFECT_EXTRA_LINK_MATERIAL)
 		e1:SetRange(LOCATION_MZONE)
 		e1:SetLabelObject(c)
+		e1:SetLabel(fid)
 		e1:SetCondition(s.mcon)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		e1:SetValue(s.matval)
@@ -49,6 +49,7 @@ function s.mcon(e)
 end
 function s.matval(e,lc,mg,c,tp)
 	local ct=e:GetLabelObject()
-	if not lc:IsLink(5) then return false,nil end
+	local fid=e:GetLabel()
+	if not lc:IsLink(5) or ct:GetFlagEffectLabel(id)~=fid then return false,nil end
 	return true,not mg or mg:IsContains(ct)
 end

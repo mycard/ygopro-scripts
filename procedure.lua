@@ -175,8 +175,14 @@ function Auxiliary.SynMixCondition(f1,f2,f3,f4,minct,maxct,gc)
 					if max-exct<maxc then maxc=max-exct end
 					if minc>maxc then return false end
 				end
-				if smat and not smat:IsCanBeSynchroMaterial(c) then return false end
 				local tp=c:GetControler()
+				if Duel.IsPlayerAffectedByEffect(tp,8173184) then
+					Duel.RegisterFlagEffect(tp,8173184+1,0,0,1)
+				end
+				if smat and not smat:IsCanBeSynchroMaterial(c) then
+					Duel.ResetFlagEffect(tp,8173184+1)
+					return false
+				end
 				local mg
 				local mgchk=false
 				if mg1 then
@@ -186,7 +192,9 @@ function Auxiliary.SynMixCondition(f1,f2,f3,f4,minct,maxct,gc)
 					mg=Auxiliary.GetSynMaterials(tp,c)
 				end
 				if smat~=nil then mg:AddCard(smat) end
-				return mg:IsExists(Auxiliary.SynMixFilter1,1,nil,f1,f2,f3,f4,minc,maxc,c,mg,smat,gc,mgchk)
+				local res=mg:IsExists(Auxiliary.SynMixFilter1,1,nil,f1,f2,f3,f4,minc,maxc,c,mg,smat,gc,mgchk)
+				Duel.ResetFlagEffect(tp,8173184+1)
+				return res
 			end
 end
 function Auxiliary.SynMixTarget(f1,f2,f3,f4,minct,maxct,gc)
@@ -202,6 +210,9 @@ function Auxiliary.SynMixTarget(f1,f2,f3,f4,minct,maxct,gc)
 					if minc>maxc then return false end
 				end
 				::SynMixTargetSelectStart::
+				if Duel.IsPlayerAffectedByEffect(tp,8173184) then
+					Duel.RegisterFlagEffect(tp,8173184+1,0,0,1)
+				end
 				local g=Group.CreateGroup()
 				local mg
 				local mgchk=false
@@ -215,26 +226,26 @@ function Auxiliary.SynMixTarget(f1,f2,f3,f4,minct,maxct,gc)
 				local c1
 				local c2
 				local c3
+				local g4=Group.CreateGroup()
 				local cancel=Duel.IsSummonCancelable()
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 				c1=mg:Filter(Auxiliary.SynMixFilter1,nil,f1,f2,f3,f4,minc,maxc,c,mg,smat,gc,mgchk):SelectUnselect(g,tp,false,cancel,1,1)
-				if not c1 then return false end
+				if not c1 then goto SynMixTargetSelectCancel end
 				g:AddCard(c1)
 				if f2 then
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 					c2=mg:Filter(Auxiliary.SynMixFilter2,g,f2,f3,f4,minc,maxc,c,mg,smat,c1,gc,mgchk):SelectUnselect(g,tp,false,cancel,1,1)
-					if not c2 then return false end
+					if not c2 then goto SynMixTargetSelectCancel end
 					if g:IsContains(c2) then goto SynMixTargetSelectStart end
 					g:AddCard(c2)
 					if f3 then
 						Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
 						c3=mg:Filter(Auxiliary.SynMixFilter3,g,f3,f4,minc,maxc,c,mg,smat,c1,c2,gc,mgchk):SelectUnselect(g,tp,false,cancel,1,1)
-						if not c3 then return false end
+						if not c3 then goto SynMixTargetSelectCancel end
 						if g:IsContains(c3) then goto SynMixTargetSelectStart end
 						g:AddCard(c3)
 					end
 				end
-				local g4=Group.CreateGroup()
 				for i=0,maxc-1 do
 					local mg2=mg:Clone()
 					if f4 then
@@ -249,7 +260,7 @@ function Auxiliary.SynMixTarget(f1,f2,f3,f4,minct,maxct,gc)
 					local c4=cg:SelectUnselect(g+g4,tp,finish,cancel,minc,maxc)
 					if not c4 then
 						if finish then break
-						else return false end
+						else goto SynMixTargetSelectCancel end
 					end
 					if g:IsContains(c4) or g4:IsContains(c4) then goto SynMixTargetSelectStart end
 					g4:AddCard(c4)
@@ -258,8 +269,12 @@ function Auxiliary.SynMixTarget(f1,f2,f3,f4,minct,maxct,gc)
 				if g:GetCount()>0 then
 					g:KeepAlive()
 					e:SetLabelObject(g)
+					Duel.ResetFlagEffect(tp,8173184+1)
 					return true
-				else return false end
+				end
+				::SynMixTargetSelectCancel::
+				Duel.ResetFlagEffect(tp,8173184+1)
+				return false
 			end
 end
 function Auxiliary.SynMixOperation(f1,f2,f3,f4,minct,maxct,gc)
@@ -361,6 +376,8 @@ function Auxiliary.SynMixCheckGoal(tp,sg,minc,ct,syncard,sg1,smat,gc,mgchk)
 	if gc and not gc(g) then return false end
 	if smat and not g:IsContains(smat) then return false end
 	if not Auxiliary.MustMaterialCheck(g,tp,EFFECT_MUST_BE_SMATERIAL) then return false end
+	if Duel.IsPlayerAffectedByEffect(tp,8173184)
+		and not g:IsExists(Auxiliary.Tuner(Card.IsSetCard,0x2),1,nil,syncard) then return false end
 	if not g:CheckWithSumEqual(Card.GetSynchroLevel,syncard:GetLevel(),g:GetCount(),g:GetCount(),syncard)
 		and (not g:IsExists(Card.IsHasEffect,1,nil,89818984)
 		or not g:CheckWithSumEqual(Auxiliary.GetSynchroLevelFlowerCardian,syncard:GetLevel(),g:GetCount(),g:GetCount(),syncard))
@@ -1944,8 +1961,8 @@ function Auxiliary.EnablePendulumAttribute(c,reg)
 	e1:SetCode(EFFECT_SPSUMMON_PROC_G)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_PZONE)
-	e1:SetCondition(Auxiliary.PendCondition())
-	e1:SetOperation(Auxiliary.PendOperation())
+	e1:SetCondition(Auxiliary.PendCondition)
+	e1:SetOperation(Auxiliary.PendOperation)
 	e1:SetValue(SUMMON_TYPE_PENDULUM)
 	c:RegisterEffect(e1)
 	--register by default
@@ -1985,29 +2002,27 @@ function Auxiliary.PConditionFilter(c,e,tp,lscale,rscale,eset)
 		and not c:IsForbidden()
 		and (Auxiliary.PendulumChecklist&(0x1<<tp)==0 or Auxiliary.PConditionExtraFilter(c,e,tp,lscale,rscale,eset))
 end
-function Auxiliary.PendCondition()
-	return	function(e,c,og)
-				if c==nil then return true end
-				local tp=c:GetControler()
-				local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_PENDULUM_SUMMON)}
-				if Auxiliary.PendulumChecklist&(0x1<<tp)~=0 and #eset==0 then return false end
-				local rpz=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
-				if rpz==nil or c==rpz then return false end
-				local lscale=c:GetLeftScale()
-				local rscale=rpz:GetRightScale()
-				if lscale>rscale then lscale,rscale=rscale,lscale end
-				local loc=0
-				if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then loc=loc+LOCATION_HAND end
-				if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)>0 then loc=loc+LOCATION_EXTRA end
-				if loc==0 then return false end
-				local g=nil
-				if og then
-					g=og:Filter(Card.IsLocation,nil,loc)
-				else
-					g=Duel.GetFieldGroup(tp,loc,0)
-				end
-				return g:IsExists(Auxiliary.PConditionFilter,1,nil,e,tp,lscale,rscale,eset)
-			end
+function Auxiliary.PendCondition(e,c,og)
+	if c==nil then return true end
+	local tp=c:GetControler()
+	local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_PENDULUM_SUMMON)}
+	if Auxiliary.PendulumChecklist&(0x1<<tp)~=0 and #eset==0 then return false end
+	local rpz=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
+	if rpz==nil or c==rpz then return false end
+	local lscale=c:GetLeftScale()
+	local rscale=rpz:GetRightScale()
+	if lscale>rscale then lscale,rscale=rscale,lscale end
+	local loc=0
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then loc=loc+LOCATION_HAND end
+	if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)>0 then loc=loc+LOCATION_EXTRA end
+	if loc==0 then return false end
+	local g=nil
+	if og then
+		g=og:Filter(Card.IsLocation,nil,loc)
+	else
+		g=Duel.GetFieldGroup(tp,loc,0)
+	end
+	return g:IsExists(Auxiliary.PConditionFilter,1,nil,e,tp,lscale,rscale,eset)
 end
 function Auxiliary.PendOperationCheck(ft1,ft2,ft)
 	return	function(g)
@@ -2016,70 +2031,68 @@ function Auxiliary.PendOperationCheck(ft1,ft2,ft)
 				return #g<=ft and #exg<=ft2 and #mg<=ft1
 			end
 end
-function Auxiliary.PendOperation()
-	return	function(e,tp,eg,ep,ev,re,r,rp,c,sg,og)
-				local rpz=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
-				local lscale=c:GetLeftScale()
-				local rscale=rpz:GetRightScale()
-				if lscale>rscale then lscale,rscale=rscale,lscale end
-				local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_PENDULUM_SUMMON)}
-				local tg=nil
-				local loc=0
-				local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
-				local ft2=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
-				local ft=Duel.GetUsableMZoneCount(tp)
-				local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
-				if ect and ect<ft2 then ft2=ect end
-				if Duel.IsPlayerAffectedByEffect(tp,59822133) then
-					if ft1>0 then ft1=1 end
-					if ft2>0 then ft2=1 end
-					ft=1
-				end
-				if ft1>0 then loc=loc|LOCATION_HAND end
-				if ft2>0 then loc=loc|LOCATION_EXTRA end
-				if og then
-					tg=og:Filter(Card.IsLocation,nil,loc):Filter(Auxiliary.PConditionFilter,nil,e,tp,lscale,rscale,eset)
-				else
-					tg=Duel.GetMatchingGroup(Auxiliary.PConditionFilter,tp,loc,0,nil,e,tp,lscale,rscale,eset)
-				end
-				local ce=nil
-				local b1=Auxiliary.PendulumChecklist&(0x1<<tp)==0
-				local b2=#eset>0
-				if b1 and b2 then
-					local options={1163}
-					for _,te in ipairs(eset) do
-						table.insert(options,te:GetDescription())
-					end
-					local op=Duel.SelectOption(tp,table.unpack(options))
-					if op>0 then
-						ce=eset[op]
-					end
-				elseif b2 and not b1 then
-					local options={}
-					for _,te in ipairs(eset) do
-						table.insert(options,te:GetDescription())
-					end
-					local op=Duel.SelectOption(tp,table.unpack(options))
-					ce=eset[op+1]
-				end
-				if ce then
-					tg=tg:Filter(Auxiliary.PConditionExtraFilterSpecific,nil,e,tp,lscale,rscale,ce)
-				end
-				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-				Auxiliary.GCheckAdditional=Auxiliary.PendOperationCheck(ft1,ft2,ft)
-				local g=tg:SelectSubGroup(tp,Auxiliary.TRUE,true,1,math.min(#tg,ft))
-				Auxiliary.GCheckAdditional=nil
-				if not g then return end
-				if ce then
-					Duel.Hint(HINT_CARD,0,ce:GetOwner():GetOriginalCode())
-					ce:UseCountLimit(tp)
-				else
-					Auxiliary.PendulumChecklist=Auxiliary.PendulumChecklist|(0x1<<tp)
-				end
-				sg:Merge(g)
-				Duel.HintSelection(Group.FromCards(c))
-				Duel.HintSelection(Group.FromCards(rpz))
-			end
+function Auxiliary.PendOperation(e,tp,eg,ep,ev,re,r,rp,c,sg,og)
+	local rpz=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
+	local lscale=c:GetLeftScale()
+	local rscale=rpz:GetRightScale()
+	if lscale>rscale then lscale,rscale=rscale,lscale end
+	local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_PENDULUM_SUMMON)}
+	local tg=nil
+	local loc=0
+	local ft1=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ft2=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
+	local ft=Duel.GetUsableMZoneCount(tp)
+	local ect=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and c29724053[tp]
+	if ect and ect<ft2 then ft2=ect end
+	if Duel.IsPlayerAffectedByEffect(tp,59822133) then
+		if ft1>0 then ft1=1 end
+		if ft2>0 then ft2=1 end
+		ft=1
+	end
+	if ft1>0 then loc=loc|LOCATION_HAND end
+	if ft2>0 then loc=loc|LOCATION_EXTRA end
+	if og then
+		tg=og:Filter(Card.IsLocation,nil,loc):Filter(Auxiliary.PConditionFilter,nil,e,tp,lscale,rscale,eset)
+	else
+		tg=Duel.GetMatchingGroup(Auxiliary.PConditionFilter,tp,loc,0,nil,e,tp,lscale,rscale,eset)
+	end
+	local ce=nil
+	local b1=Auxiliary.PendulumChecklist&(0x1<<tp)==0
+	local b2=#eset>0
+	if b1 and b2 then
+		local options={1163}
+		for _,te in ipairs(eset) do
+			table.insert(options,te:GetDescription())
+		end
+		local op=Duel.SelectOption(tp,table.unpack(options))
+		if op>0 then
+			ce=eset[op]
+		end
+	elseif b2 and not b1 then
+		local options={}
+		for _,te in ipairs(eset) do
+			table.insert(options,te:GetDescription())
+		end
+		local op=Duel.SelectOption(tp,table.unpack(options))
+		ce=eset[op+1]
+	end
+	if ce then
+		tg=tg:Filter(Auxiliary.PConditionExtraFilterSpecific,nil,e,tp,lscale,rscale,ce)
+	end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	Auxiliary.GCheckAdditional=Auxiliary.PendOperationCheck(ft1,ft2,ft)
+	local g=tg:SelectSubGroup(tp,Auxiliary.TRUE,true,1,math.min(#tg,ft))
+	Auxiliary.GCheckAdditional=nil
+	if not g then return end
+	if ce then
+		Duel.Hint(HINT_CARD,0,ce:GetOwner():GetOriginalCode())
+		ce:UseCountLimit(tp)
+	else
+		Auxiliary.PendulumChecklist=Auxiliary.PendulumChecklist|(0x1<<tp)
+	end
+	sg:Merge(g)
+	Duel.HintSelection(Group.FromCards(c))
+	Duel.HintSelection(Group.FromCards(rpz))
 end
 --enable revive limit for monsters that are also pendulum sumonable from certain locations (Odd-Eyes Revolution Dragon)
 function Auxiliary.EnableReviveLimitPendulumSummonable(c, loc)
@@ -2263,6 +2276,7 @@ function Auxiliary.MustMaterialCheck(v,tp,code)
 	local g=Duel.GetMustMaterial(tp,code)
 	if not v then
 		if code==EFFECT_MUST_BE_XMATERIAL and Duel.IsPlayerAffectedByEffect(tp,67120578) then return false end
+		if code==EFFECT_MUST_BE_SMATERIAL and Duel.IsPlayerAffectedByEffect(tp,8173184) then return false end
 		return #g==0
 	end
 	return Duel.CheckMustMaterial(tp,v,code)

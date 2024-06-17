@@ -1,6 +1,7 @@
 --蛇眼の大炎魔
 local s,id,o=GetID()
 function s.initial_effect(c)
+	--
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
@@ -11,6 +12,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.mvtg)
 	e1:SetOperation(s.mvop)
 	c:RegisterEffect(e1)
+	--
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -38,17 +40,19 @@ function s.mvcon(e,tp,eg,ep,ev,re,r,rp)
 	else
 		ft2=ft2+1
 	end
-	e:SetLabelObject(ac)
 	return ac and ac:IsControler(1-tp) and Duel.GetLocationCount(tp,LOCATION_SZONE)>=ft1
 		and Duel.GetLocationCount(1-tp,LOCATION_SZONE)>=ft2
 end
 function s.mvtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
+	local c=e:GetHandler()
+	local ac=c:GetBattleTarget()
+	if chk==0 then return ac~=nil end
+	Duel.SetTargetCard(ac)
 end
 function s.mvop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local ac=e:GetLabelObject()
-	if not ac:IsRelateToBattle() or not c:IsRelateToEffect(e) then return false end
+	local ac=Duel.GetFirstTarget()
+	if not ac:IsRelateToEffect(e) or not c:IsRelateToEffect(e) or ac:IsStatus(STATUS_BATTLE_DESTROYED) or c:IsStatus(STATUS_BATTLE_DESTROYED) or not ac:IsControler(1-tp) then return false end
 	local ft1=0
 	local ft2=0
 	if c:GetOwner()==tp then
