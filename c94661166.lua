@@ -4,6 +4,7 @@ function s.initial_effect(c)
 	aux.AddCodeList(c,89812483)
 	--search
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -25,7 +26,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function s.filter(c)
-	return (c:IsSetCard(0x1bb) and c:IsType(TYPE_TRAP) or aux.IsCodeListed(c,89812483) and c:IsType(TYPE_MONSTER)) and c:IsAbleToHand()
+	return (c:IsSetCard(0x1ba) and c:IsType(TYPE_TRAP) or aux.IsCodeListed(c,89812483) and c:IsType(TYPE_MONSTER)) and c:IsAbleToHand()
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
@@ -40,7 +41,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.cfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x1bb) and c:IsType(TYPE_TRAP)
+	return c:IsFaceup() and c:IsSetCard(0x1ba) and c:IsType(TYPE_TRAP)
 end
 function s.poscon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_ONFIELD,0,1,nil)
