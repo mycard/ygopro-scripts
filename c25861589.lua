@@ -1,6 +1,7 @@
 --アロマブレンド
 local s,id,o=GetID()
 function c25861589.initial_effect(c)
+	aux.AddCodeList(c,15177750,92266279,28265983)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,1))
@@ -33,8 +34,11 @@ function s.filter(c)
 	return c:IsCode(15177750,92266279,28265983) and not c:IsForbidden()
 end
 function s.settg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil)
-		and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
+	if chk==0 then
+		local ft=Duel.GetLocationCount(tp,LOCATION_SZONE)
+		if e:IsHasType(EFFECT_TYPE_ACTIVATE) and not e:GetHandler():IsLocation(LOCATION_SZONE) then ft=ft-1 end
+		return ft>0 and Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil)
+	end
 end
 function s.setop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
