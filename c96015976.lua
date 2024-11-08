@@ -1,4 +1,5 @@
 --再転
+---@param c Card
 function c96015976.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -17,7 +18,6 @@ function c96015976.initial_effect(c)
 	e2:SetOperation(c96015976.operation)
 	c:RegisterEffect(e2)
 end
-c96015976.toss_dice=true
 function c96015976.filter(c)
 	local lv=c:GetLevel()
 	local olv=c:GetOriginalLevel()

@@ -1,4 +1,5 @@
 --D・スマホン
+---@param c Card
 function c15521027.initial_effect(c)
 	c:EnableReviveLimit()
 	--special summon
@@ -34,7 +35,6 @@ function c15521027.initial_effect(c)
 	e3:SetOperation(c15521027.opd)
 	c:RegisterEffect(e3)
 end
-c15521027.toss_dice=true
 function c15521027.spfilter(c)
 	return c:IsSetCard(0x26) and c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
 end
