@@ -2,14 +2,6 @@
 local s,id,o=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-	--Traitor_chaining_effect
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e0:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e0:SetCode(EVENT_ADJUST)
-	e0:SetRange(0xff)
-	e0:SetOperation(s.adjustop)
-	c:RegisterEffect(e0)
 	--special summon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
@@ -19,7 +11,7 @@ function s.initial_effect(c)
 	--spsummon
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
 	e2:SetRange(LOCATION_HAND+LOCATION_GRAVE)
 	e2:SetCountLimit(1,id+EFFECT_COUNT_CODE_OATH)
@@ -58,38 +50,11 @@ function s.initial_effect(c)
 	e8:SetValue(s.efilter)
 	c:RegisterEffect(e8)
 end
-function s.adjustop(e,tp,eg,ep,ev,re,r,rp)
-	if not s.globle_check then
-		s.globle_check=true
-		s.Traitor_RegisterEffect=Card.RegisterEffect
-		function Card.RegisterEffect(Card_c,Effect_e,bool)
-			if Effect_e:GetType() and bit.band(Effect_e:GetType(),EFFECT_TYPE_QUICK_O+EFFECT_TYPE_QUICK_F)~=0 then
-				if Effect_e:GetCode() and Effect_e:GetCode()==EVENT_CHAINING then
-					Card_c:RegisterFlagEffect(id,0,0,1)
-				end
-			end
-			if bool then
-				s.Traitor_RegisterEffect(Card_c,Effect_e,bool)
-			else
-				s.Traitor_RegisterEffect(Card_c,Effect_e,false)
-			end
-		end
-		local rg=Duel.GetMatchingGroup(Card.IsType,tp,0xff,0xff,nil,TYPE_MONSTER)
-		for tc in aux.Next(rg) do
-			if tc.initial_effect then
-				local Traitor_initial_effect=s.initial_effect
-				s.initial_effect=function() end
-				tc:ReplaceEffect(id,0)
-				s.initial_effect=Traitor_initial_effect
-				tc.initial_effect(tc)
-			end
-		end
-		Card.RegisterEffect=s.Traitor_RegisterEffect
-	end
+function s.quick_filter(e)
+	return e:GetCode()==EVENT_CHAINING and e:IsHasType(EFFECT_TYPE_QUICK_O) and e:IsHasRange(LOCATION_HAND+LOCATION_MZONE)
 end
 function s.cfilter(c)
-	return (c:GetFlagEffect(id)>0 or c.Traitor_chaining_effect) and bit.band(c:GetOriginalType(),TYPE_MONSTER)==TYPE_MONSTER
-		and c:IsFaceupEx()
+	return c:IsOriginalEffectProperty(s.quick_filter) and c:GetOriginalType()&TYPE_MONSTER==TYPE_MONSTER and c:IsFaceupEx()
 end
 function s.spcon(e,c)
 	if c==nil then return true end
