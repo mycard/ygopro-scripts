@@ -1,4 +1,5 @@
 --迅雷の魔王－スカル・デーモン
+---@param c Card
 function c61370518.initial_effect(c)
 	--maintain
 	local e1=Effect.CreateEffect(c)
@@ -18,7 +19,6 @@ function c61370518.initial_effect(c)
 	e2:SetOperation(c61370518.disop)
 	c:RegisterEffect(e2)
 end
-c61370518.toss_dice=true
 function c61370518.mtcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end

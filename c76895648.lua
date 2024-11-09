@@ -1,4 +1,5 @@
 --デンジャラスマシン TYPE－6
+---@param c Card
 function c76895648.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)
@@ -18,7 +19,6 @@ function c76895648.initial_effect(c)
 	e2:SetOperation(c76895648.operation)
 	c:RegisterEffect(e2)
 end
-c76895648.toss_dice=true
 function c76895648.condition(e,tp,eg,ep,ev,re,r,rp)
 	return tp==Duel.GetTurnPlayer()
 end
