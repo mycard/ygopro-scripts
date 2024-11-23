@@ -21,15 +21,16 @@ function s.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_CANNOT_REMOVE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetTargetRange(1,1)
 	e2:SetTarget(s.efilter)
+	c:RegisterEffect(e2)
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_GRANT)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(id)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetTargetRange(LOCATION_MZONE,0)
 	e3:SetTarget(s.eftg)
-	e3:SetLabelObject(e2)
 	c:RegisterEffect(e3)
 	--remove and tograve
 	local e4=Effect.CreateEffect(c)
@@ -64,7 +65,7 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.efilter(e,c,rp,r,re)
-	return c==e:GetHandler() and r&REASON_EFFECT>0
+	return c:IsHasEffect(id) and r&REASON_EFFECT>0
 end
 function s.eftg(e,c)
 	return c:IsSetCard(0x38) and c:IsFaceup()
