@@ -58,11 +58,15 @@ function c59514116.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	e:SetLabel(s)
 	if s==0 then
-		e:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
+		if e:IsCostChecked() then
+			e:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
+		end
 		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 	end
 	if s==1 then
-		e:SetCategory(CATEGORY_SPECIAL_SUMMON)
+		if e:IsCostChecked() then
+			e:SetCategory(CATEGORY_SPECIAL_SUMMON)
+		end
 		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
 	end
 end
