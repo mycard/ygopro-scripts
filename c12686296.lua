@@ -47,12 +47,12 @@ function s.spfilter(c,e,tp)
 	return c:IsSetCard(0x5) and c:IsLevel(10) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function s.thfilter(c)
-	return c.toss_coin and c:IsAbleToHand()
+	return c:IsEffectProperty(aux.EffectPropertyFilter(EFFECT_FLAG_COIN)) and c:IsAbleToHand()
 end
 function s.coinop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local res=-1
-	if c:IsHasEffect(73206827) then
+	if Duel.IsPlayerAffectedByEffect(tp,73206827) then
 		local b1=Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,nil,e,tp)
 		local b2=Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil)
 		if b1 and not b2 then
@@ -90,5 +90,5 @@ function s.condition(e)
 end
 function s.aclimit(e,re,tp)
 	local loc=re:GetActivateLocation()
-	return bit.band(loc,LOCATION_ONFIELD)~=0 and re:IsActiveType(TYPE_MONSTER)
+	return loc&LOCATION_ONFIELD~=0 and re:IsActiveType(TYPE_MONSTER)
 end

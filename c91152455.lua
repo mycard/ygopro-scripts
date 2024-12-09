@@ -30,10 +30,8 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local res=e:GetLabel()==100
-		e:SetLabel(0)
 		return (res or Duel.GetLocationCount(tp,LOCATION_MZONE)>0) and Duel.IsExistingMatchingCard(s.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
 	end
-	e:SetLabel(0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
@@ -41,7 +39,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tc=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()
-	if tc and Duel.SpecialSummon(tc,0,tp,tp,true,true,POS_FACEUP)~=0
+	if tc and Duel.SpecialSummon(tc,0,tp,tp,true,true,POS_FACEUP)~=0 and e:GetLabel()==100
 		and c:IsOnField() and c:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.BreakEffect()
 		c:CancelToGrave(true)

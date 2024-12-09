@@ -31,7 +31,7 @@ function s.initial_effect(c)
 end
 s.toss_coin=true
 function s.cfilter(c)
-	return c:IsFaceup() and c.toss_coin
+	return c:IsFaceup() and c:IsEffectProperty(aux.EffectPropertyFilter(EFFECT_FLAG_COIN))
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(s.cfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
@@ -52,7 +52,7 @@ function s.cointg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_COIN,nil,0,tp,1)
 end
 function s.setfilter(c)
-	return c:IsType(TYPE_SPELL) and c:IsSSetable() and c.toss_coin
+	return c:IsType(TYPE_SPELL) and c:IsSSetable() and c:IsEffectProperty(aux.EffectPropertyFilter(EFFECT_FLAG_COIN))
 end
 function s.desfilter(c)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:GetSequence()<5
@@ -60,7 +60,7 @@ end
 function s.coinop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local res=-1
-	if c:IsHasEffect(73206827) then
+	if Duel.IsPlayerAffectedByEffect(tp,73206827) then
 		local b1=Duel.IsExistingMatchingCard(s.setfilter,tp,LOCATION_DECK,0,1,nil)
 		local b2=Duel.IsExistingMatchingCard(s.desfilter,tp,LOCATION_SZONE,LOCATION_SZONE,1,nil)
 		if b1 and not b2 then

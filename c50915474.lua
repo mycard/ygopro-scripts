@@ -26,9 +26,8 @@ function s.initial_effect(c)
 	e3:SetOperation(s.atkop)
 	c:RegisterEffect(e3)
 end
-s.toss_coin=true
 function s.thfilter(c)
-	return not c:IsCode(id) and c.toss_coin and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+	return not c:IsCode(id) and c:IsEffectProperty(aux.EffectPropertyFilter(EFFECT_FLAG_COIN)) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
