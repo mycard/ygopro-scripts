@@ -1,6 +1,5 @@
 --ヴェーダ＝カーランタ
 local s,id,o=GetID()
----@param c Card
 function s.initial_effect(c)
 	aux.AddCodeList(c,56099748)
 	local e1=Effect.CreateEffect(c)
@@ -58,7 +57,6 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		local tag=g:Select(tp,1,1,nil)
 		Duel.SendtoHand(tag,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tag)
-		Duel.ShuffleDeck(tp)
 	end
 end
 function s.desfilter2(c,tp)
