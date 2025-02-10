@@ -1,5 +1,4 @@
 --E・HERO ゴッド・ネオス
----@param c Card
 function c31111109.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
@@ -80,7 +79,7 @@ function c31111109.rstop(e,tp,eg,ep,ev,re,r,rp)
 		atke:SetReset(RESET_EVENT+RESETS_STANDARD)
 	end
 	c:ResetEffect(cid,RESET_COPY)
-	c:ResetEffect(RESET_DISABLE,RESET_EVENT)
+	c:ResetEffect(RESET_DISABLE,RESET_EVENT+RESETS_STANDARD)
 	if atke then
 		atke:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 	end

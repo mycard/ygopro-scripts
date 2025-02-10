@@ -1,5 +1,4 @@
 --サプライズ・チェーン
----@param c Card
 function c70491413.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -34,7 +33,11 @@ end
 function c70491413.activate(e,tp,eg,ep,ev,re,r,rp)
 	local cl=Duel.GetCurrentChain()
 	if cl>=2 then
-		Duel.SortDecktop(tp,tp,cl)
+		Duel.ConfirmDecktop(tp,cl)
+		local g=Duel.GetDecktopGroup(tp,cl)
+		if g:GetCount()>0 then
+			Duel.SortDecktop(tp,tp,g:GetCount())
+		end
 	end
 	if cl>=3 then
 		Duel.BreakEffect()

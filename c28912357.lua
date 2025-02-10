@@ -1,5 +1,4 @@
 --ギアギガント X
----@param c Card
 function c28912357.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_MACHINE),4,2)
@@ -44,7 +43,6 @@ function c28912357.operation(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
-		Duel.ShuffleDeck(tp)
 	end
 end
 function c28912357.spcon(e,tp,eg,ep,ev,re,r,rp)
