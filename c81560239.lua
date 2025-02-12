@@ -103,10 +103,7 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
 			goto cancel2
 		end
 		tc:SetMaterial(mat)
-		local mat2=mat:Filter(Card.IsLocation,nil,LOCATION_DECK):Filter(Card.IsRace,nil,RACE_REPTILE)
-		mat:Sub(mat2)
 		Duel.ReleaseRitualMaterial(mat)
-		Duel.SendtoGrave(mat2,REASON_EFFECT+REASON_MATERIAL+REASON_RITUAL+REASON_RELEASE)
 		Duel.BreakEffect()
 		Duel.SpecialSummon(tc,SUMMON_TYPE_RITUAL,tp,tp,false,true,POS_FACEUP)
 		tc:CompleteProcedure()

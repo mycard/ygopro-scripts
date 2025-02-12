@@ -1,6 +1,7 @@
 --No.69 紋章神コート・オブ・アームズ－ゴッド・レイジ
 local s,id,o=GetID()
 function s.initial_effect(c)
+	aux.AddCodeList(c,77571455)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,4,5)
 	c:EnableReviveLimit()
