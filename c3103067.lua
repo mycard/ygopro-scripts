@@ -29,9 +29,10 @@ function c3103067.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c3103067.operation(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
-	if not a or not a:IsRelateToBattle() then return end
 	if e:GetLabel()==0 then
-		Duel.Destroy(a,REASON_EFFECT)
+		if a and a:IsRelateToBattle() then
+			Duel.Destroy(a,REASON_EFFECT)
+		end
 	end
 	if e:GetLabel()==1 then
 		local tc=Duel.GetFirstTarget()
