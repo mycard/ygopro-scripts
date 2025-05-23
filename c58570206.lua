@@ -1,4 +1,4 @@
---Heavy Polymerization
+--多層融合
 local s,id,o=GetID()
 function s.initial_effect(c)
 	--Activate
@@ -19,7 +19,6 @@ function s.fcheck1(ct)
 				end
 				return true
 			end
-				
 end
 function s.fcheck2(tp,sg,fc)
 	return sg:GetCount()>=3
