@@ -30,7 +30,7 @@ function s.initial_effect(c)
 	e2:SetRange(LOCATION_SZONE)
 	e2:SetCountLimit(1,id)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetHintTiming(TIMING_END_PHASE)	
+	e2:SetHintTiming(TIMING_END_PHASE)
 	e2:SetCondition(s.condition)
 	e2:SetTarget(s.target)
 	e2:SetOperation(s.operation)
@@ -75,7 +75,7 @@ function s.condition(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.filter(c,tp)
 	return c:IsSetCard(0x15d) and c:IsType(TYPE_CONTINUOUS)
-		and c:IsCanBePlacedOnField(tp)
+		and not c:IsForbidden() and c:CheckUniqueOnField(tp)
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and s.filter(chkc,tp) end

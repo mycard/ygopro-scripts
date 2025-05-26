@@ -51,7 +51,7 @@ function c13166648.activate(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 	Duel.SpecialSummonComplete()
-	if ss and a:IsRelateToBattle() then
+	if ss then
 		Duel.CalculateDamage(a,tc)
 	end
 end

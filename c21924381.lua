@@ -28,7 +28,7 @@ function c21924381.activate(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e)
-		and a:IsRelateToBattle() and a:IsAttackable() and a:IsRelateToEffect(e) and not a:IsImmuneToEffect(e) then
+		and a:IsAttackable() and a:IsRelateToEffect(e) and not a:IsImmuneToEffect(e)then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
@@ -43,8 +43,6 @@ function c21924381.activate(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e2)
 		local e3=e2:Clone()
 		a:RegisterEffect(e3)
-		if tc:IsControler(tp) then
-			Duel.CalculateDamage(a,tc)
-		end
+		Duel.CalculateDamage(a,tc)
 	end
 end
