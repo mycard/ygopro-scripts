@@ -1,4 +1,4 @@
---Fusion check functions
+--Fusion check function
 Auxiliary.FCheckAdditional=nil
 Auxiliary.FGoalCheckAdditional=nil
 
