@@ -65,6 +65,9 @@ function s.anfilter(c,tp)
 	return c:IsSetCard(0x1cd) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 		and not s.announced_set[tp][c:GetCode()]
 end
+function s.anexfilter(c,code)
+	return c:IsFaceup() and c:IsCode(code)
+end
 function s.thfilter(c,code)
 	return c:IsSetCard(0x1cd) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 		and c:IsCode(code)
