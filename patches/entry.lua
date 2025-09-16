@@ -4,4 +4,4 @@ function load_patch(name)
 end
 
 load_patch("multiple-preloaduds")
-load_patch("spsummon-once-hint")
+-- load_patch("spsummon-once-hint")
