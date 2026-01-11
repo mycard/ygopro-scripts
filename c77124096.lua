@@ -19,6 +19,7 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetTarget(s.target)
 	e1:SetLabelObject(e0)
+	e1:SetOperation(s.operation)
 	c:RegisterEffect(e1)
 end
 
@@ -47,6 +48,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 			{b1,aux.Stringid(id,1)},
 			{b2,aux.Stringid(id,2)})
 	end
+	e:SetLabel(op)
 	if op==1 then
 		if e:IsCostChecked() then
 			Duel.RegisterFlagEffect(tp,id,RESET_PHASE+PHASE_END,0,1)
@@ -54,14 +56,20 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		end
 		Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 		Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_REMOVED)
-		e:SetOperation(s.fsop)
 	elseif op==2 then
 		if e:IsCostChecked() then
 			Duel.RegisterFlagEffect(tp,id+o,RESET_PHASE+PHASE_END,0,1)
 			e:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 		end
 		Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-		e:SetOperation(s.thop)
+	end
+end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	local op=e:GetLabel()
+	if op==1 then
+		s.fsop(e,tp,eg,ep,ev,re,r,rp)
+	elseif op==2 then
+		s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
