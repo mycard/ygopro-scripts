@@ -25,6 +25,7 @@ function s.initial_effect(c)
 	--sett
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
+	e3:SetCategory(CATEGORY_SSET)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_PHASE+PHASE_END)
 	e3:SetRange(LOCATION_MZONE)
@@ -63,9 +64,9 @@ function s.matop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.efilter(re)
-	return function(e,te)
-			   return te==re and te:IsActivated()
-		   end
+	return	function(e,te)
+				return te==re and te:IsActivated()
+			end
 end
 function s.setfilter(c,tp)
 	return c:IsType(TYPE_SPELL) and c:IsSSetable()
