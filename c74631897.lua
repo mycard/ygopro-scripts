@@ -31,6 +31,7 @@ function s.initial_effect(c)
 	--set
 	local e4=Effect.CreateEffect(c)
 	e4:SetDescription(aux.Stringid(id,0))
+	e4:SetCategory(CATEGORY_SSET)
 	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e4:SetProperty(EFFECT_FLAG_DELAY)
@@ -92,6 +93,7 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,c)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 		local tc2=g:SelectUnselect(nil,tp,false,true,1,1)
 		if tc2 then
+			tc2:RegisterFlagEffect(id+o,RESET_EVENT+RESETS_STANDARD,0,1)
 			local sg=Group.FromCards(tc,tc2)
 			sg:KeepAlive()
 			e:SetLabelObject(sg)
@@ -100,12 +102,15 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk,c)
 	end
 	return false
 end
+function s.disfilter(c)
+	return c:GetFlagEffect(id+o)==0
+end
 function s.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD+RESET_PHASE+PHASE_END,0,1)
 	local g=e:GetLabelObject()
-	local hg=g:Filter(Card.IsLocation,nil,LOCATION_HAND)
-	g:Sub(hg)
-	Duel.SendtoGrave(hg,REASON_SPSUMMON+REASON_DISCARD)
+	local dg=g:Filter(s.disfilter,nil)
+	g:Sub(dg)
+	Duel.SendtoGrave(dg,REASON_SPSUMMON+REASON_DISCARD)
 	Duel.Release(g,REASON_SPSUMMON)
 	g:DeleteGroup()
 end
