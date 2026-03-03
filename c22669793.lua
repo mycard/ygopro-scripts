@@ -69,7 +69,6 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_REMOVED,0,1,1,nil)
 		if #g>0 then
 			Duel.SSet(tp,g)
-			Duel.ConfirmCards(1-tp,g)
 		end
 		e:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOHAND)
 	end
